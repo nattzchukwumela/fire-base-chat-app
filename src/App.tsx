@@ -11,12 +11,14 @@ interface UserDetail {
 	signIn: () => void;
 }
 
-		const App: React.FC = () => {
+	const App: React.FC = () => {
   const [userDetail, setUserDetail] = useState<UserDetail>({ result: null, signIn: () => {} });
 	const [room, setRoom] = useState<null>(null);
   const roomInputRef = useRef<HTMLInputElement>(null);
 	const cookies = new Cookies();
-	const [isAuth] = useState(cookies.get("auth-token"));
+	const [isAuth, setIsAuth] = useState(cookies.get("auth-token"));
+
+	console.log(userDetail);
 
   const signInWithGoogle = async () => {
     try {
@@ -24,14 +26,15 @@ interface UserDetail {
       setUserDetail({ result, signIn: signInWithGoogle });
       if (result && 'user' in result) {
         cookies.set("auth-token", result.user.refreshToken);
+        setIsAuth(true);
       }
     } catch (error) {
       console.error("Error signing in with Google", error);
     }
   }
-  
+
 	if (!isAuth) {
-		return <Auth signIn={signInWithGoogle}  />;
+		return <Auth signIn={signInWithGoogle} />;
 	}
 	return (
 		<div>
