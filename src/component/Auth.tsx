@@ -1,5 +1,5 @@
 import React from 'react';
-
+import '../styles/Auth.css'
 
 type Props = {
   // Define your props here, for example:
