@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import './App.css';
 import { auth, provider } from "./config/firebase-config";
-import { signInWithPopup, UserCredential } from "firebase/auth";
+import { signInWithPopup, UserCredential, signOut } from "firebase/auth";
 import Cookies from 'universal-cookie';
 import Auth from './component/Auth';
 import Chat from './component/Chat';
@@ -31,8 +31,11 @@ const App: React.FC = () => {
 		}
 	}
 
-	const signUserOut = (): void => {
-
+	async function signUserOut(): Promise<void> {
+		await signOut(auth);
+		cookies.remove("auth-token");
+		setIsAuth(false);
+		setRoom("");
 	}
 
 	if (!isAuth) {
@@ -62,8 +65,8 @@ const App: React.FC = () => {
 						</button>
 					</div>}
 			</div>
-			<div className='sign-out' onClick={signUserOut}>
-				sign out
+			<div className='sign-out'>
+				<button onClick={signUserOut}>sign out</button>
 			</div>
 		</>
 	);
